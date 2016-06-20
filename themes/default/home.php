@@ -12,12 +12,20 @@
 <?php $this->load->view('common/header');?>
     <div class="container">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-9">
                 <div class="panel">
-                    <div class="panel-heading">
+                    <!-- <div class="panel-heading">
                         <h3 class="panel-title"><?php echo $settings['welcome_tip']?></h3>
-                    </div>
+                    </div> -->
                     <div class="panel-body">
+                      <ul class="nav nav-pills topic-list reply-list">
+                        <li role="presentation" class="active"><a href="#">全部</a></li>
+                      <?php if($catelist[0]){?>
+                    	<?php foreach ($catelist[0] as $v){?>
+                    	<li role="presentation"><a href="<?php echo url('node_show',$v['node_id']);?>"><?php echo $v['cname']; ?></a></li>
+                		<?php }?>
+                		<?php }?>
+                      </ul>
 	                    <?php if($topic_list):?>
                         <ul class="media-list" id="topic_list">
 							<?php foreach ($topic_list as $v):?>
@@ -29,14 +37,14 @@
                                 <div class="media-body">
                                     <h2 class="media-heading topic-list-heading"><a href="<?php echo url('topic_show',$v['topic_id']);?>"><?php echo $v['title'];?></a><?php if( $v['is_top'] == '1' ) echo '<span class="badge badge-info">置顶</span>'; ?></h2>
                                     <p class="text-muted">
-                                        <span><a href="<?php echo url('node_show',$v['node_id']);?>"><?php echo $v['cname']?></a></span>&nbsp;•&nbsp;
-                                        <span><a href="<?php echo site_url('user/profile/'.$v['uid']);?>"><?php echo $v['username'];?></a></span>&nbsp;•&nbsp;
+                                      <span class="label label-info"><a href="<?php echo url('node_show',$v['node_id']);?>"><?php echo $v['cname']?></a></span> &nbsp;•&nbsp;
+                                        <span>by <a href="<?php echo site_url('user/profile/'.$v['uid']);?>"><?php echo $v['username'];?></a></span><!--&nbsp;•&nbsp;
                                         <span><?php echo friendly_date($v['updatetime'])?></span>&nbsp;•&nbsp;
                                         <?php if ($v['rname']!=NULL) : ?>
                                             <span>最后回复来自 <a href="<?php echo site_url('user/profile/'.$v['ruid']);?>"><?php echo $v['rname']; ?></a></span>
                                         <?php else : ?>
                                             <span>暂无回复</span>
-                                        <?php endif; ?>
+                                        <?php endif; ?> -->
                                     </p>
                                 </div>
                             </li>
@@ -48,14 +56,14 @@
                     </div>
                      <div class="panel-footer"><a href="javascript:void(0)" id="getmore" class="startbbs">更多新主题</a></div>
                 </div><!-- /.topic list -->
-                
+
             </div><!-- /.col-md-8 -->
 
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<?php $this->load->view('common/sidebar_login');?>
-				<?php $this->load->view('common/sidebar_cates');?>
+				<!-- <?php $this->load->view('common/sidebar_cates');?> -->
 
-				 <div class="panel panel-default">
+				 <!-- <div class="panel panel-default">
 				    <div class="panel-heading">
 				        <h3 class="panel-title">社区统计</h3>
 				    </div>
@@ -69,10 +77,10 @@
 				            <li>回复数： <?php echo $stats['total_comments']?></li>
 				        </ul>
 				    </div>
-				</div> 
+				</div> -->
 
 
-				<?php $this->load->view('common/sidebar_ad');?>
+				<!-- <?php $this->load->view('common/sidebar_ad');?> -->
 				 <div class="panel panel-default">
 				    <div class="panel-heading">
 				        <h3 class="panel-title">友情链接</h3>
@@ -112,7 +120,7 @@ $(function() {
 				//$("#infolist").after(tr);
 			});
 		});
-		
+
 </script>
 
 </body>

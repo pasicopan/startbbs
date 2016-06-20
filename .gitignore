@@ -3,5 +3,6 @@ install.lock
 uploads
 data/
 /themes/light
+app/config/myconfig.php
 *.cache
 *.swp

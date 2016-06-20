@@ -11,7 +11,7 @@
 <?php $this->load->view('common/header');?>
     <div class="container">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-9">
                 <div class="panel">
                     <div class="panel-heading">
                         <h2 class="panel-title"><?php echo $page['title'];?></h2>
@@ -22,7 +22,7 @@
                 </div>
             </div><!-- /.col-md-8 -->
 
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <?php $this->load->view('common/sidebar_login');?>
 				<?php $this->load->view('common/sidebar_ad');?>
             </div><!-- /.col-md-4 -->

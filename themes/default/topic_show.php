@@ -16,13 +16,14 @@
 <?php } else{?>
 <script src="<?php echo base_url('static/common/js/qiniu.js')?>" type="text/javascript"></script>
 <?php }?>
-    
+<link href="<?php echo base_url('static/common/editor.md/css/editormd.preview.css');?>" media="screen" rel="stylesheet" type="text/css" />
+
 </head>
 <body name="top">
 <?php $this->load->view('common/header'); ?>
     <div class="container">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-9">
                 <div class="panel panel-default">
                     <div class="panel-heading topic-detail-heading">
                         <div class="pull-right"><a href="<?php echo site_url('user/profile/'.$content['uid']);?>"><img src="<?php echo base_url($content['avatar'].'normal.png');?>" alt="<?php echo $content['username']?>';?>"></a></div>
@@ -38,13 +39,17 @@
 							<span><a href="<?php echo site_url('favorites/del/'.$content['topic_id']);?>" title="取消收藏">取消收藏</a></span>
 							<?php } else {?>
 							<span><a href="<?php echo site_url('favorites/add/'.$content['topic_id']);?>" title="点击收藏">收藏</a></span>
-							<?php } ?>                 
+							<?php } ?>
                             <?php } ?>
                         </small>
                     </div>
                     <?php if($page==1){?>
                     <div class="panel-body content">
-                        <?php echo $content['content']?>
+                        <textarea  id="source-content" name="name" rows="8" cols="40" style="display:none;"><?php echo $content['content']?></textarea>
+                        <div id="editormd-view">
+                          <textarea style="display:none;" name="test-editormd-markdown-doc">###Hello world!</textarea>
+                        </div>
+
                         <?php if(isset($tag_list)){?>
 						<p class="tag">
 						<?php foreach($tag_list as $tag){?>
@@ -57,7 +62,7 @@
                     <?php }?>
                     <div class="panel-footer">
 						<?php if($this->auth->is_user($content['uid']) || $this->auth->is_admin() || $this->auth->is_master($cate['node_id'])){?>
-						
+
 						<a href="<?php echo site_url('topic/edit/'.$content['topic_id']);?>" class="btn btn-default btn-sm unbookmark" data-method="edit" rel="nofollow">编辑</a>
 						<a href="javascript:if(confirm('确实要删除吗?'))location='<?php echo site_url('topic/del/'.$content['topic_id'].'/'.$content['node_id'].'/'.$content['uid']);?>'" class="btn btn-sm btn-danger" data-method="edit" rel="nofollow">删除</a>
 						<?php }?>
@@ -97,9 +102,9 @@
                             </div>
                             <hr class="smallhr">
                             <?php endforeach; ?>
-                            </ul>        
+                            </ul>
                         <?php if($pagination):?><nav><ul class="pager"><?php echo $pagination;?></ul></nav><?php endif?>
-                        
+
                     </div>
                 </div><!-- /.panel comment -->
                 <div id="error"></div>
@@ -138,13 +143,13 @@
                 </div><!-- /.panel add comment -->
             </div><!-- /.col-md-8 -->
 
-			<div class="col-md-4">
+			<div class="col-md-3">
 			<?php $this->load->view('common/sidebar_login');?>
 			<?php $this->load->view('common/sidebar_cateinfo');?>
 			<?php $this->load->view('common/sidebar_cates');?>
-			<?php $this->load->view('common/sidebar_related_topic');?>
-			<?php $this->load->view('common/sidebar_ad');?>
-			</div><!-- /.col-md-4 -->
+			<!-- <?php $this->load->view('common/sidebar_related_topic');?> -->
+			<!-- <?php $this->load->view('common/sidebar_ad');?> -->
+    </div> <!-- /.col-md-3 -->
 
         </div><!-- /.row -->
     </div><!-- /.container -->
@@ -152,5 +157,58 @@
 
 
 <?php $this->load->view('common/footer');?>
+
+<script src="<?php echo base_url('static/common/editor.md/lib/marked.min.js')?>"></script>
+<script src="<?php echo base_url('static/common/editor.md/lib/prettify.min.js')?>"></script>
+<script src="<?php echo base_url('static/common/editor.md/lib/raphael.min.js')?>"></script>
+<script src="<?php echo base_url('static/common/editor.md/lib/underscore.min.js')?>"></script>
+<script src="<?php echo base_url('static/common/editor.md/lib/sequence-diagram.min.js')?>"></script>
+<script src="<?php echo base_url('static/common/editor.md/lib/flowchart.min.js')?>"></script>
+<script src="<?php echo base_url('static/common/editor.md/lib/jquery.flowchart.min.js')?>"></script>
+
+<script src="<?php echo base_url('static/common/editor.md/editormd.min.js')?>"></script>
+<script type="text/javascript">
+$(function() {
+                var testEditormdView;
+                // , testEditormdView2;
+
+                // $.get("test.md", function(markdown) {
+
+				    testEditormdView = editormd.markdownToHTML("editormd-view", {
+                        markdown        : $("#source-content").text() ,//+ "\r\n" + $("#append-test").text(),
+                        //htmlDecode      : true,       // 开启 HTML 标签解析，为了安全性，默认不开启
+                        htmlDecode      : "style,script,iframe",  // you can filter tags decode
+                        //toc             : false,
+                        tocm            : true,    // Using [TOCM]
+                        //tocContainer    : "#custom-toc-container", // 自定义 ToC 容器层
+                        //gfm             : false,
+                        //tocDropdown     : true,
+                        // markdownSourceCode : true, // 是否保留 Markdown 源码，即是否删除保存源码的 Textarea 标签
+                        emoji           : true,
+                        taskList        : true,
+                        tex             : true,  // 默认不解析
+                        flowChart       : true,  // 默认不解析
+                        sequenceDiagram : true,  // 默认不解析
+                    });
+
+                    //console.log("返回一个 jQuery 实例 =>", testEditormdView);
+
+                    // 获取Markdown源码
+                    //console.log(testEditormdView.getMarkdown());
+
+                    //alert(testEditormdView.getMarkdown());
+                // });
+
+                // testEditormdView2 = editormd.markdownToHTML("test-editormd-view2", {
+                //     htmlDecode      : "style,script,iframe",  // you can filter tags decode
+                //     emoji           : true,
+                //     taskList        : true,
+                //     tex             : true,  // 默认不解析
+                //     flowChart       : true,  // 默认不解析
+                //     sequenceDiagram : true,  // 默认不解析
+                // });
+            });
+
+</script>
 </body>
 </html>

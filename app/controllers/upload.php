@@ -19,7 +19,7 @@ class upload extends SB_Controller {
 			mkdir($this->path,0777,true);
 		}
 	}
-	
+
 	function images() {
 				if(!$this->auth->is_admin())
 		{
@@ -32,19 +32,19 @@ class upload extends SB_Controller {
 			'encrypt_name' => true,
 			'max_size' => 2000
 		);
-		
+
 		$this->load->library('upload', $config);
 		if(!$this->upload->do_upload($this->input->post('file'))){
 			$data['info'] = $this->upload->display_errors();
 			exit(json_encode($data));
 		} else {
-			
+
 			$upload_data = $this->upload->data();
-			
+
             $data['status'] = 'success';
             $data['info']  = '上传成功!';
             $data['img']  = $upload_data['file_name'];
-            
+
 			$config = array(
 				'source_image' => $upload_data['full_path'],
 				'maintain_ration' => true,
@@ -63,11 +63,11 @@ class upload extends SB_Controller {
         $datas['result_field'] = 'up_name';
 
 			exit(json_encode($data));
-			
+
 		}
 
 		//}
-		
+
 	}
 
 	function upload_pic($node_id='') {
@@ -76,9 +76,9 @@ class upload extends SB_Controller {
 		{
 			die('无权访问此页');
 		}
-		
+
 		//if($this->input->post('submit')) {
-			
+
 		$path = 'uploads/ico/';
 		$path_url=FCPATH.$path;
 		if(!file_exists($path_url)){
@@ -92,20 +92,20 @@ class upload extends SB_Controller {
 			'overwrite'=>true,
 			'max_size' => 2000
 		);
-		
+
 		$this->load->library('upload', $config);
 		if(!$this->upload->do_upload('img')){
 			$data['error'] = $this->upload->display_errors('<p>', '</p>');
 			echo json_encode($data);
 		} else {
-			
+
 			$upload_data = $this->upload->data();
-			
+
             $data['status'] = 'success';
             $data['msg']  = '上传成功!';
             //$data['file_url']  = $upload_data['file_name'];
             $data['file_url']  = $path.$upload_data['file_name'];
-            
+
 			$config = array(
 				'source_image' => $upload_data['full_path'],
 				'maintain_ration' => true,
@@ -123,11 +123,11 @@ class upload extends SB_Controller {
 			//指定父页面接收上传文件名的元素id
         	$datas['result_field'] = 'up_name';
 			exit(json_encode($data));
-			
+
 		}
 
 		//}
-		
+
 	}
 
 	function upload_file() {
@@ -136,9 +136,10 @@ class upload extends SB_Controller {
 		{
 			die('无权访问此页');
 		}
-		
+
 		//if($this->input->post('submit')) {
-		$file=$this->_get_file_path(@$_FILES['file']['name']);
+		$fileName = "editormd-image-file";
+		$file=$this->_get_file_path(@$_FILES[$fileName]['name']);
 		$path = @$file['file_path'];
 		$path_url=FCPATH.$path;
 		if(!file_exists($path_url)){
@@ -152,20 +153,25 @@ class upload extends SB_Controller {
 			'overwrite'=>true,
 			'max_size' => 2000
 		);
-		
+
+		$data['info'] = json_encode($file);
 		$this->load->library('upload', $config);
-		if(!$this->upload->do_upload('file')){
+		if(!$this->upload->do_upload($fileName)){
 			$data['error'] = $this->upload->display_errors('<p>', '</p>');
+			$data['success'] = 0;
 			echo json_encode($data);
 		} else {
-			
+
 			$upload_data = $this->upload->data();
-			
+
+            $data['success'] = 1;
             $data['status'] = 'success';
+            $data['message']  = '上传成功!';
             $data['msg']  = '上传成功!';
             //$data['file_url']  = $upload_data['file_name'];
             $data['file_url']  = $path.$upload_data['file_name'];
-           
+            $data['url']  = base_url().$path.$upload_data['file_name'];
+
 			$config = array(
 				'source_image' => $upload_data['full_path'],
 				'maintain_ration' => true,
@@ -186,38 +192,38 @@ class upload extends SB_Controller {
 			//指定父页面接收上传文件名的元素id
         	$datas['result_field'] = 'up_name';
 			exit(json_encode($data));
-			
+
 		}
 
 		//}
-		
-		
+
+
 	}
-	
+
 	function get_images() {
-		
-		
+
+
 		//return $images;
 	}
 
-	
+
 //	function get_images() {
-//		
+//
 //		$files = scandir($this->path);
 //		$files = array_diff($files, array('.', '..', 'thumbs'));
-//		
+//
 //		$images = array();
-//		
+//
 //		foreach ($files as $file) {
 //			$images []= array (
 //				'url' => $this->upload_path_url . $file,
 //				'thumb_url' => $this->upload_path_url . 'thumbs/' . $file
 //			);
 //		}
-//		
+//
 //		return $images;
 //	}
-	
+
 
 	public function qiniu()
 	{
@@ -226,7 +232,7 @@ class upload extends SB_Controller {
 			'accesskey'=>$this->config->item('accesskey'),
 			'secretkey'=>$this->config->item('secretkey'),
 			'bucket'=>$this->config->item('bucket'),
-			'file_domain'=>$this->config->item('file_domain').'/',	
+			'file_domain'=>$this->config->item('file_domain').'/',
 		);
 		$this->load->library('qiniu_lib',$params);
 		$file=$this->_get_file_path(@$_FILES['file']['name']);

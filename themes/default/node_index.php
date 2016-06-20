@@ -12,7 +12,7 @@
 <?php $this->load->view('common/header');?>
     <div class="container">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-9">
                 <div class="panel">
                     <div class="panel-heading">
                         <h3 class="panel-title"><?php echo $settings['site_name']?><span class='pull-right'>话题总数<span class='badge badge-info'>&nbsp;<?php echo $stats['total_topics'];?>&nbsp;</span></span></h3>
@@ -58,7 +58,7 @@
                         <ul class="media-list">
 	                        <?php foreach ($catelist[$v['node_id']] as $k=>$c) {?>
                             <li class="media section">
-                                <a class="pull-left" href="<?php echo url('node_show',$v['node_id']);?>"><img class="img-rounded" src="<?php echo base_url($c['ico'])?>" alt="<?php echo $c['cname'];?>"></a>     	
+                                <a class="pull-left" href="<?php echo url('node_show',$v['node_id']);?>"><img class="img-rounded" src="<?php echo base_url($c['ico'])?>" alt="<?php echo $c['cname'];?>"></a>
                             	<span class="pull-right text-right"><p>/今日</p><p><?php echo $c['listnum'];?>/话题</p></span>
                                 <div class="media-body">
                                     <h4 class="media-heading"><a href="<?php echo url('node_show',$c['node_id']);?>"><?php echo $c['cname'];?></a></h4></h4>
@@ -88,7 +88,7 @@
               <?php endif?>
             </div><!-- /.col-md-8 -->
 
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <?php $this->load->view('common/sidebar_login');?>
 				<?php $this->load->view('common/sidebar_new_users');?>
 				<?php $this->load->view('common/sidebar_new_topics');?>

@@ -21,30 +21,34 @@ class topic extends SB_controller
 
 	public function show ($topic_id=1,$page=1)
 	{
-		
+
 		$content = $this->topic_m->get_topic_by_topic_id($topic_id);
 		if(!$content){
 			show_message('贴子不存在',site_url('/'));
 		} elseif(!$this->auth->user_permit($content['node_id'])){//权限
-			show_message('您无权访问此节点中的贴子');
+			show_message('您无权访问此节点中的贴子',site_url('/'));
 		} else {
 			//$this->output->cache(1);
 			$content = $this->topic_m->get_topic_by_topic_id($topic_id);
 			//取出处理
+			$content['content']=br2nl($content['content']);
 			$content['content']=stripslashes($content['content']);
+			// $this->load->library('markdown');
+			// $content['content'] = $this->markdown->parse($content['content']);
 
-			
+			// $content['content']=decode_format($content['content']);
+
 			$data['content'] = $content;
-			
+
 			//if(!$content){
 			//	$this->myclass->notice('alert("贴子不存在");window.location.href="'.site_url('/').'";');
 			//	exit;
 			//}
-			
+
 
 			//更新浏览数
 			$this->db->where('topic_id',$content['topic_id'])->update('topics',array('views'=>$content['views']+1));
-			
+
 			//评论分页
 			$limit = 10;
 			$config['uri_segment'] = 4;
@@ -68,10 +72,10 @@ class topic extends SB_controller
 			$config['last_tag_open'] = '<li class=\'last\'>';
 			$config['last_tag_close'] = '</li>';
 			$config['num_links'] = 10;
-			
+
 			$this->load->library('pagination');
 			$this->pagination->initialize($config);
-			
+
 			$start = ($page-1)*$limit;
 			$data['page'] = $page;
 			$data['pagination'] = $this->pagination->create_links();
@@ -87,13 +91,13 @@ class topic extends SB_controller
 			$data['content']['next'] = $this->topic_m->get_near_id($topic_id,$data['cate']['node_id'],1);
 			$data['content']['previous']=$data['content']['previous']['topic_id'];
 			$data['content']['next']=$data['content']['next']['topic_id'];
-			
+
 			// 判断是不是已被收藏
 			$data['in_favorites'] = '';
 			$uid = $this->session->userdata('uid');
 			if($uid){
 				$user_fav = $this->db->get_where('favorites',array('uid'=>$uid))->row_array();
-			
+
 				if($user_fav && $user_fav['content']){
 					if(strpos(' ,'.$user_fav['content'].',', ','.$topic_id.',') ){
 						$data['in_favorites'] = '1';
@@ -119,18 +123,18 @@ class topic extends SB_controller
 					$data['tag_list'][$k]['tag_url']=str_replace('(:any)',urlencode($v),$data['tag_url'][0]);
 				}
 			}
-			
+
 			//相关贴子
 			if(isset($data['tags'])){
 				$this->load->model('tag_m');
 				$data['related_topic_list'] = $this->tag_m->get_related_topics_by_tag($data['tags'],10);
-				
+
 			}
 			//set top
 			if(@$_GET['act']=='set_top'){
 				if($this->auth->is_admin() || $this->auth->is_master($content['node_id'])){
 					$this->topic_m->set_top($content['topic_id'],$content['is_top']);
-					redirect('topic/show/'.$content['topic_id']);	
+					redirect('topic/show/'.$content['topic_id']);
 				} else {
 					show_message('你无权置顶贴子');
 				}
@@ -153,7 +157,7 @@ class topic extends SB_controller
 		//获取已选择过的分类名称
 		$node_id=($this->input->post ('node_id'))?$this->input->post ('node_id'):$this->uri->segment(3);
 		$data['cate']=$this->db->get_where('nodes',array('node_id'=>$node_id))->row_array();
-		
+
 		$data['title'] = '发表话题';
 		$uid = $this->session->userdata('uid');
 		$this->load->model ('user_m');
@@ -185,9 +189,9 @@ class topic extends SB_controller
 			$data['content']=format_content($data['content']);
 			//开启审核时
 			if($this->config->item('is_approve')=='on'){
-				$data['is_hidden'] = 1;	
+				$data['is_hidden'] = 1;
 			}
-			
+
 			//标签
 			$this->load->model('tag_m');
 			if($this->config->item('auto_tag') =='on'){
@@ -196,15 +200,15 @@ class topic extends SB_controller
 			} else{
 				$data['keywords'] = $this->input->post ('keywords', true);
 			}
-			
-			
+
+
 			if($this->topic_m->add($data)){
 				//最新贴子id
 				$new_topic_id = $this->db->insert_id();
-				
+
 				//入tag表
 				$this->tag_m->insert_tag($data['keywords'], $new_topic_id);
-				
+
 				//更新贴子数
 				$this->db->set('listnum','listnum+1',false)->where('node_id',$node_id)->update('nodes');
 				//更新统计
@@ -226,9 +230,9 @@ class topic extends SB_controller
 				$this->user_m->update_credit($uid,$this->config->item('credit_post'));
 				//审核未开启时
 				if($this->config->item('is_approve')=='off'){
-					redirect('topic/show/'.$new_topic_id);	
+					redirect('topic/show/'.$new_topic_id);
 				} else {
-					show_message('贴子通过审核才能在前台显示',site_url());	
+					show_message('贴子通过审核才能在前台显示',site_url());
 				}
 			}
 
@@ -242,7 +246,7 @@ class topic extends SB_controller
         $data['csrf_name'] = $this->security->get_csrf_token_name();
         $data['csrf_token'] = $this->security->get_csrf_hash();
 		$this->load->view('topic_add',$data);
-		
+
 	}
 
 	public function edit($topic_id)
@@ -263,7 +267,8 @@ class topic extends SB_controller
 			//反转义
 			$data['item']['content']=stripslashes($data['item']['content']);
 			//反format
-			$data['item']['content'] = decode_format($data['item']['content']);	
+			// $data['item']['content'] = decode_format($data['item']['content']);
+			// $data['item']['content'] = htmlspecialchars($data['item']['content']);
 			//获取所有分类
 			$data['cates'] = $this->cate_m->get_all_cates();
 			//获取当前分类(包括已选择)
@@ -282,8 +287,8 @@ class topic extends SB_controller
 					'updatetime' => time(),
 				);
 
-				$this->load->helper('format_content');
-				$str['content'] = format_content($str['content']);
+				// $this->load->helper('format_content');
+				// $str['content'] = format_content($str['content']);
 				if($this->topic_m->update_topic($topic_id,$str)){
 					show_message('修改成功',site_url('topic/show/'.$topic_id),1);
 				}

@@ -8,26 +8,28 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
+		<!-- <a class="navbar-brand" href="<?php echo site_url()?>">广告支持中心</a> -->
 		<a class="navbar-brand" href="<?php echo site_url()?>"><?php echo $settings['logo'];?></a>
 <!--<a class=".btn .btn-default navbar-btn collapsed" data-target=".navbar-collapse" data-toggle="collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a href="<?php echo site_url()?>" class="brand">Start<span class="green">BBS</span></a>-->
 	</div>
 
         <div class="navbar-collapse collapse">
+					<?php echo form_open('search',array('class'=>'navbar-form navbar-left','target'=>'_blank','role'=>'search'))?>
+						<div class="form-group">
+							<input type="text" class="form-control" name="keyword" placeholder="输入关键字回车">
+						</div>
+			</form>
           <ul class="nav navbar-nav">
-            <li<?php if(@$action=='home'){?> class="active"<?php }?>><a href="<?php echo site_url()?>"><?php echo lang('front_home');?></a></li>
-            <li<?php if(@$action=='node'){?> class="active"<?php }?>><a href="<?php echo site_url('node')?>">节点</a></li>
-            <li<?php if(@$action=='user'){?> class="active"<?php }?>><a href="<?php echo site_url('user')?>">会员</a></li>
-            <li<?php if(@$action=='tag'){?> class="active"<?php }?>><a href="<?php echo site_url('tag')?>">标签</a></li>
-            <li<?php if(@$action=='add'){?> class="active"<?php }?>><a href="<?php echo site_url('topic/add')?>">发表</a></li>
+            <!-- <li<?php if(@$action=='home'){?> class="active"<?php }?>><a href="<?php echo site_url()?>"><?php echo lang('front_home');?></a></li> -->
+            <!-- <li<?php if(@$action=='node'){?> class="active"<?php }?>><a href="<?php echo site_url('node')?>">节点</a></li> -->
+            <!-- <li<?php if(@$action=='user'){?> class="active"<?php }?>><a href="<?php echo site_url('user')?>">会员</a></li> -->
+            <!-- <li<?php if(@$action=='tag'){?> class="active"<?php }?>><a href="<?php echo site_url('tag')?>">标签</a></li> -->
+
            </ul>
 
-        <?php echo form_open('search',array('class'=>'navbar-form navbar-left','target'=>'_blank','role'=>'search'))?>
-		      <div class="form-group">
-		        <input type="text" class="form-control" name="keyword" placeholder="输入关键字回车">
-		      </div>
-		</form>
+
           <ul class="nav navbar-nav navbar-right">
- 
+						<li<?php if(@$action=='add'){?> class="active"<?php }?>><a href="<?php echo site_url('topic/add')?>">发表新话题</a></li>
 	        <?php if($this->session->userdata('uid')){ ?>
 	        <li><a href="<?php echo site_url('message/')?>"><span class="glyphicon glyphicon-envelope"></span> <?php if($myinfo['messages_unread']>0) echo $myinfo['messages_unread']?></a></li>
             <li class="dropdown">
@@ -50,7 +52,7 @@
             <?php }?>
           </ul>
         </div><!--/.nav-collapse -->
-        
+
 </div>
 </div>
 

@@ -2,25 +2,27 @@
 <div class="panel">
     <div class="panel-body">
         <div class="row">
-            <div class="col-md-5">
+            <div class="col-md-12 text-center">
                 <a href="<?php echo site_url('user/profile/'.$myinfo['uid']);?>"><img alt="<?php echo $myinfo['username']?> large avatar" class="img-rounded" src="<?php echo base_url($myinfo['avatar'].'big.png')?>" /></a>
             </div>
-            <div class="col-md-7">
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
 	            <ul class="list-unstyled">
 	            	<li><a href="<?php echo site_url('user/profile/'.$myinfo['uid']);?>" title="<?php echo $myinfo['username']?>"><?php echo $myinfo['username']?></a></li>
-	            	<li>用户组：<?php echo $myinfo['group_name']?></li>
-	            	<li>积分：<?php echo $myinfo['credit']?></li>
+	            	<!-- <li>用户组：<?php echo $myinfo['group_name']?></li> -->
+	            	<!-- <li>积分：<?php echo $myinfo['credit']?></li> -->
 	            </ul>
             </div>
         </div>
         <div class="row text-center">
-            <div class="col-md-6">
-	            <p><a href="<?php echo site_url('favorites');?>"><?php echo $myinfo['favorites']?></a></p>
-	            <p><a href="<?php echo site_url('favorites');?>">收藏</a></p>
+            <div class="col-md-12">
+	            <!-- <p><a href="<?php echo site_url('favorites');?>"></a></p> -->
+	            <p><a href="<?php echo site_url('favorites');?>">收藏 <?php echo $myinfo['favorites']?></a></p>
             </div>
-            <div class="col-md-6">
-	            <p><a href="<?php echo site_url('follow');?>"><?php echo $myinfo['follows']?></a></p>
-	            <p><a href="<?php echo site_url('follow');?>">关注</a></p>
+            <div class="col-md-12">
+	            <!-- <p><a href="<?php echo site_url('follow');?>"></a></p> -->
+	            <p><a href="<?php echo site_url('follow');?>">关注 <?php echo $myinfo['follows']?></a></p>
             </div>
         </div>
     </div>

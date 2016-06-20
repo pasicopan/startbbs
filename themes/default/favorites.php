@@ -10,7 +10,7 @@
 <?php $this->load->view('common/header'); ?>
    <div class="container">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-9">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title">我收藏的话题<!--<span class='pull-right badge badge-info'><?php echo $user['favorites'] ;?></span>--></h3>
@@ -45,9 +45,9 @@
                 </div>
             </div><!-- /.col-md-8 -->
 
-            <div class="col-md-4">
+            <div class="col-md-3">
 			<?php $this->load->view('common/sidebar_login');?>
-			<?php $this->load->view('common/sidebar_ad');?>
+			<!-- <?php $this->load->view('common/sidebar_ad');?> -->
             </div><!-- /.col-md-4 -->
 
         </div><!-- /.row -->
